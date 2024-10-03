@@ -21,7 +21,7 @@ class Docs::AbsencesController < ActionController::Base
       end
 
       response :default do
-        key :description, 'unexpected error'
+        key :description, 'Processing Error'
         schema do
           key :'$ref', :Error
         end
@@ -29,7 +29,8 @@ class Docs::AbsencesController < ActionController::Base
     end
 
     operation :post do
-      key :description, 'Creates absences into Studios'
+      key :summary, 'Creates absences into Studio Stays'
+      key :description, 'Update stays with Absences'
       key :operationId, 'addAbsences'
       key :produces, [
         'application/json'
@@ -44,7 +45,10 @@ class Docs::AbsencesController < ActionController::Base
         key :description, 'absences to add into the studios'
         key :required, true
         schema do
-          key :'$ref', :AbsenceInput
+          key :type, :array
+          items do
+            key :'$ref', :AbsenceInput
+          end
         end
       end
 
@@ -58,7 +62,7 @@ class Docs::AbsencesController < ActionController::Base
         end
       end
       response :default do
-        key :description, 'unexpected error'
+        key :description, 'Processing Error'
         schema do
           key :'$ref', :Error
         end

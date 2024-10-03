@@ -21,7 +21,7 @@ class DocumentationController < ApplicationController
   end
 
   SWAGGERED_CLASSES = [
-    Docs::StudiosController,
+    Docs::AbsencesController,
     Docs::Studio,
     Docs::Absence,
     Docs::Error,
