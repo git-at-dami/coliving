@@ -11,10 +11,15 @@ class AbsencesController < ApplicationController
   end
 
   def create
+    # TODO: Potential Improvements 
+    # 1: Authentication for Updating Stays
+    # 2: Better validation using dry_validation gem
+    # 3: Creating Serializers for Responses
+
     absences = params[:absences]
     
     if absences.nil? || !absences.is_a?(Array)
-      render json: { error: 'Invalid absences format' }, status: :unprocessable_entity
+      render json: { message: 'Invalid absences format' }, status: :unprocessable_entity
       return
     end
 
@@ -34,7 +39,12 @@ class AbsencesController < ApplicationController
 
     render json: { 
         message: 'Stays updated successfully',  
-        studios: Studio.where(name: absences.map { |absence| absence[:studio] })
+        studios: Studio.where(name: absences.map { |absence| absence[:studio] }).map do |studio|
+          { 
+            name: studio.name, 
+            stays: studio.stays 
+          }
+        end
       }, 
       status: :created
   end

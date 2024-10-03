@@ -1,3 +1,5 @@
 # frozen_string_literal: true
 
-# Pagy::VARS[:items] = 25
+require 'pagy/extras/metadata'
+require 'pagy/extras/overflow'
+Pagy::DEFAULT[:overflow] = :empty_page

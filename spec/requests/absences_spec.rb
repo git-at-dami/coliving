@@ -19,7 +19,7 @@ RSpec.describe "Absences", type: :request do
 
     it "returns paginated studios with stays and absences" do
       json_response = JSON.parse(response.body)
-      expect(json_response['studios'].size).to be <= Pagy::VARS[:items]
+      expect(json_response['studios'].size).to be 2
 
       studio1_data = json_response['studios'].find { |s| s['name'] == 'Studio 1' }
       expect(studio1_data['name']).to eq('Studio 1')
@@ -44,10 +44,8 @@ RSpec.describe "Absences", type: :request do
 
     it "includes pagination metadata" do
       json_response = JSON.parse(response.body)
-      expect(json_response['pagy']).to include('count', 'page', 'items', 'pages', 'prev', 'next')
       expect(json_response['pagy']['count']).to eq(2)
       expect(json_response['pagy']['page']).to eq(1)
-      expect(json_response['pagy']['items']).to eq(Pagy::VARS[:items])
       expect(json_response['pagy']['pages']).to eq(1)
       expect(json_response['pagy']['prev']).to be_nil 
       expect(json_response['pagy']['next']).to be_nil 
@@ -116,7 +114,7 @@ RSpec.describe "Absences", type: :request do
         post '/absences', params: { absences: "invalid" }
         expect(response).to have_http_status(:unprocessable_entity)
         json_response = JSON.parse(response.body)
-        expect(json_response['error']).to eq('Invalid absences format')
+        expect(json_response['message']).to eq('Invalid absences format')
       end
 
       it "returns http unprocessable entity with missing studio" do
