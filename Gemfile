@@ -60,3 +60,5 @@ end
 gem 'pagy', '~> 9.0'
 
 gem 'swagger-blocks', '~> 3.0'
+
+gem "database_cleaner", "~> 2.0"
