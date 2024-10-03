@@ -18,23 +18,30 @@ RSpec.describe Studio, type: :model do
     let(:studio) { Studio.create(name: 'Studio A') }
 
     it 'returns no absences if there are no stays' do
-      expect(studio.abscences).to be_empty
+      expect(ComputeStudioAbscences.call(studio)).to be_empty
     end
 
     it 'returns an absence before the first stay' do
-      studio.stays.create(start_date: '2024-01-10', end_date: '2024-01-15')
-      expect(studio.abscences).to eq([{ start_date: Date.new(2024, 1, 1), end_date: Date.new(2024, 1, 9) }])
+      studio.stays.create(studio: studio, start_date: '2024-01-10', end_date: '2024-01-15')
+      expect(ComputeStudioAbscences.call(studio)).to eq([
+        { start_date: Date.new(2024, 1, 1), end_date: Date.new(2024, 1, 9) },
+        { start_date: Date.new(2024, 1, 16), end_date: Date.today }
+      ])
     end
 
     it 'returns an absence after the last stay' do
-      studio.stays.create(start_date: '2024-01-05', end_date: '2024-01-10')
-      expect(studio.abscences).to eq([{ start_date: Date.new(2024, 1, 11), end_date: Date.today }])
+      studio.stays.create(studio: studio, start_date: '2024-01-05', end_date: '2024-01-10')
+      expect(ComputeStudioAbscences.call(studio)).to eq([
+        { start_date: Date.new(2024, 1, 1), end_date: Date.new(2024, 1, 4) },
+        { start_date: Date.new(2024, 1, 11), end_date: Date.today }
+      ])
     end
 
     it 'returns absences between stays' do
       studio.stays.create(start_date: '2024-01-05', end_date: '2024-01-10')
       studio.stays.create(start_date: '2024-01-15', end_date: '2024-01-20')
-      expect(studio.abscences).to eq([
+      expect(ComputeStudioAbscences.call(studio)).to eq([
+                                       { start_date: Date.new(2024, 1, 1), end_date: Date.new(2024, 1, 4) },
                                        { start_date: Date.new(2024, 1, 11), end_date: Date.new(2024, 1, 14) },
                                        { start_date: Date.new(2024, 1, 21), end_date: Date.today }
                                      ])
@@ -62,13 +69,13 @@ RSpec.describe Studio, type: :model do
 
     it 'updates the start_date of a stay that ends after the absence' do
       stay = studio.stays.create(start_date: '2024-01-10', end_date: '2024-01-20')
-      studio.update_stays_for_absence(Date.new(2024, 1, 0o5), Date.new(2024, 1, 15))
+      studio.update_stays_for_absence(Date.new(2024, 1, 5), Date.new(2024, 1, 15))
       expect(stay.reload.start_date).to eq(Date.new(2024, 1, 16))
     end
 
     it 'destroys a stay that falls entirely within the absence' do
       stay = studio.stays.create(start_date: '2024-01-10', end_date: '2024-01-15')
-      studio.update_stays_for_absence(Date.new(2024, 1, 0o5), Date.new(2024, 1, 20))
+      studio.update_stays_for_absence(Date.new(2024, 1, 5), Date.new(2024, 1, 20))
       expect { stay.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end

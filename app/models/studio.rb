@@ -7,26 +7,6 @@ class Studio < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
 
-  def abscences
-    resulting_absences = []
-
-    stays = stays.order(:start_date)
-    last_end_date = RESIDENCE_OPENING_DATE
-
-    stays.each do |stay|
-      if stay.start_date > last_end_date
-        resulting_absences << { start_date: last_end_date, end_date: stay.start_date - 1 }
-      end
-
-      last_end_date = stay.end_date + 1
-    end
-
-    # Check for absence after the last stay
-    return unless last_end_date < Date.today
-
-    resulting_absences << { start_date: last_end_date, end_date: Date.today }
-  end
-
   def update_stays_for_absence(start_date, end_date)
     stays.where('start_date < ?', end_date).where('end_date > ?', start_date).each do |stay|
       if stay.start_date < start_date && stay.end_date > end_date
