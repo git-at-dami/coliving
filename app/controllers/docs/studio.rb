@@ -1,7 +1,7 @@
-class Abscence < ActiveRecord::Base
+class Absence < ActiveRecord::Base
     include Swagger::Blocks
   
-    swagger_schema :Abscence do
+    swagger_schema :Absence do
       key :required, [:name]
   
       property :name do
@@ -9,7 +9,7 @@ class Abscence < ActiveRecord::Base
       end
     end
   
-    swagger_schema :AbscenceInput do
+    swagger_schema :AbsenceInput do
       property :studio do
         key :type, :string
       end

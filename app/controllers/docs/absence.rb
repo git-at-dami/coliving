@@ -1,7 +1,7 @@
-class Docs::Abscence < ActiveRecord::Base
+class Docs::Absence < ActiveRecord::Base
   include Swagger::Blocks
 
-  swagger_schema :Abscence do
+  swagger_schema :Absence do
     key :required, [:name]
 
     property :name do
@@ -9,10 +9,10 @@ class Docs::Abscence < ActiveRecord::Base
     end
   end
 
-  swagger_schema :AbscenceInput do
+  swagger_schema :AbsenceInput do
     allOf do
       schema do
-        key :'$ref', :Abscence
+        key :'$ref', :Absence
       end
       schema do
         key :required, [:name]

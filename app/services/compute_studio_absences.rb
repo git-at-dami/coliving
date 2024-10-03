@@ -1,4 +1,4 @@
-class ComputeStudioAbscences
+class ComputeStudioAbsences
   def self.call(studio)
     resulting_absences = []
 

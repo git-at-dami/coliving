@@ -7,6 +7,10 @@ class Studio < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
 
+  def absences
+    ComputeStudioAbsences.call(self)
+  end
+
   def update_stays_for_absence(start_date, end_date)
     stays.where('start_date < ?', end_date).where('end_date > ?', start_date).each do |stay|
       if stay.start_date < start_date && stay.end_date > end_date

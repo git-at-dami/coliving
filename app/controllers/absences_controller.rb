@@ -5,7 +5,7 @@ class AbsencesController < ApplicationController
     pagy, studio_records = pagy(Studio.includes(:stays).all) 
 
     render json: { 
-      studios: studio_records.map { |studio| { name: studio.name, stays: studio.stays, absences: studio.absences  }
+      studios: studio_records.map { |studio| { name: studio.name, stays: studio.stays, absences: studio.absences  } },
       pagy: pagy_metadata(pagy) 
     }
   end
@@ -34,7 +34,7 @@ class AbsencesController < ApplicationController
 
     render json: { 
         message: 'Stays updated successfully',  
-        studios: Studio.where(name: abscence.map { |abscence| abscence[:studio] })
+        studios: Studio.where(name: absences.map { |absence| absence[:studio] })
       }, 
       status: :created
   end

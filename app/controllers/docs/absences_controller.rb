@@ -1,21 +1,21 @@
-class Docs::AbscencesController < ActionController::Base
+class Docs::AbsencesController < ActionController::Base
   include Swagger::Blocks
 
-  swagger_path '/abscences/' do
+  swagger_path '/absences/' do
     operation :get do
-      key :summary, 'List Abscences by Studio'
+      key :summary, 'List Absences by Studio'
       key :description, 'all the absences (dates between which the studio tenant is absent there) in the db'
-      key :operationId, 'listAbscences'
+      key :operationId, 'listAbsences'
       key :tags, [
-        'abscence'
+        'absence'
       ]
      
       response 200 do
-        key :description, 'Abscences'
+        key :description, 'Absences'
         schema do
           key :type, :array
           items do
-            key :'$ref', :Abscence
+            key :'$ref', :Absence
           end
         end
       end
@@ -29,22 +29,22 @@ class Docs::AbscencesController < ActionController::Base
     end
 
     operation :post do
-      key :description, 'Creates abscences into Studios'
-      key :operationId, 'addAbscences'
+      key :description, 'Creates absences into Studios'
+      key :operationId, 'addAbsences'
       key :produces, [
         'application/json'
       ]
       key :tags, [
-        'abscence'
+        'absence'
       ]
 
       parameter do
-        key :name, :abscences
+        key :name, :absences
         key :in, :body
-        key :description, 'abscences to add into the studios'
+        key :description, 'absences to add into the studios'
         key :required, true
         schema do
-          key :'$ref', :AbscenceInput
+          key :'$ref', :AbsenceInput
         end
       end
 

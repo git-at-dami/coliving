@@ -14,37 +14,41 @@ RSpec.describe Studio, type: :model do
     expect(studio2).to_not be_valid
   end
 
-  describe '#abscences' do
+  describe '#absences' do
     let(:studio) { Studio.create(name: 'Studio A') }
 
     it 'returns no absences if there are no stays' do
-      expect(ComputeStudioAbscences.call(studio)).to be_empty
+      expect(ComputeStudioAbsences.call(studio)).to be_empty
     end
 
     it 'returns an absence before the first stay' do
-      studio.stays.create(studio: studio, start_date: '2024-01-10', end_date: '2024-01-15')
-      expect(ComputeStudioAbscences.call(studio)).to eq([
-        { start_date: Date.new(2024, 1, 1), end_date: Date.new(2024, 1, 9) },
-        { start_date: Date.new(2024, 1, 16), end_date: Date.today }
-      ])
+      studio.stays.create(studio:, start_date: '2024-01-10', end_date: '2024-01-15')
+      expect(ComputeStudioAbsences.call(studio)).to eq([
+                                                         { start_date: Date.new(2024, 1, 1),
+                                                           end_date: Date.new(2024, 1, 9) },
+                                                         { start_date: Date.new(2024, 1, 16), end_date: Date.today }
+                                                       ])
     end
 
     it 'returns an absence after the last stay' do
-      studio.stays.create(studio: studio, start_date: '2024-01-05', end_date: '2024-01-10')
-      expect(ComputeStudioAbscences.call(studio)).to eq([
-        { start_date: Date.new(2024, 1, 1), end_date: Date.new(2024, 1, 4) },
-        { start_date: Date.new(2024, 1, 11), end_date: Date.today }
-      ])
+      studio.stays.create(studio:, start_date: '2024-01-05', end_date: '2024-01-10')
+      expect(ComputeStudioAbsences.call(studio)).to eq([
+                                                         { start_date: Date.new(2024, 1, 1),
+                                                           end_date: Date.new(2024, 1, 4) },
+                                                         { start_date: Date.new(2024, 1, 11), end_date: Date.today }
+                                                       ])
     end
 
     it 'returns absences between stays' do
       studio.stays.create(start_date: '2024-01-05', end_date: '2024-01-10')
       studio.stays.create(start_date: '2024-01-15', end_date: '2024-01-20')
-      expect(ComputeStudioAbscences.call(studio)).to eq([
-                                       { start_date: Date.new(2024, 1, 1), end_date: Date.new(2024, 1, 4) },
-                                       { start_date: Date.new(2024, 1, 11), end_date: Date.new(2024, 1, 14) },
-                                       { start_date: Date.new(2024, 1, 21), end_date: Date.today }
-                                     ])
+      expect(ComputeStudioAbsences.call(studio)).to eq([
+                                                         { start_date: Date.new(2024, 1, 1),
+                                                           end_date: Date.new(2024, 1, 4) },
+                                                         { start_date: Date.new(2024, 1, 11),
+                                                           end_date: Date.new(2024, 1, 14) },
+                                                         { start_date: Date.new(2024, 1, 21), end_date: Date.today }
+                                                       ])
     end
   end
 

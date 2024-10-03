@@ -23,7 +23,7 @@ class DocumentationController < ApplicationController
   SWAGGERED_CLASSES = [
     Docs::StudiosController,
     Docs::Studio,
-    Docs::Abscence,
+    Docs::Absence,
     Docs::Error,
     self
   ].freeze
